@@ -1,0 +1,222 @@
+CREATE TABLE `hclinicas` (
+  `num` int NOT NULL AUTO_INCREMENT,
+  `cedula` char(10) NOT NULL,
+  `nombreCompleto` varchar(50) DEFAULT NULL,
+  `fecha` varchar(15) DEFAULT NULL,
+  `anamnesis` mediumtext,
+  `exploracion` mediumtext,
+  `diagnostico` mediumtext,
+  `tratamiento` mediumtext,
+  PRIMARY KEY (`num`),
+  KEY `cedula` (`cedula`),
+  CONSTRAINT `hclinicas_ibfk_1` FOREIGN KEY (`cedula`) REFERENCES `paciente` (`cedula`)
+) ENGINE=InnoDB AUTO_INCREMENT=50 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+
+/************************************/
+
+CREATE TABLE `paciente` (
+  `cedula` char(10) NOT NULL,
+  `estadoPaciente` varchar(5) DEFAULT NULL,
+  `apellido1` varchar(20) DEFAULT NULL,
+  `apellido2` varchar(20) DEFAULT NULL,
+  `nombre` varchar(20) DEFAULT NULL,
+  `nombreCompleto` varchar(50) DEFAULT NULL,
+  `historiaClinica` int DEFAULT NULL,
+  `sexo` varchar(8) DEFAULT NULL,
+  `fechaNacimiento` varchar(15) DEFAULT NULL,
+  `edad` int DEFAULT NULL,
+  `grupoSanguineo` varchar(5) DEFAULT NULL,
+  `telefono` varchar(10) DEFAULT NULL,
+  `celular` char(10) DEFAULT NULL,
+  `direccion` varchar(50) DEFAULT NULL,
+  `provincia` varchar(20) DEFAULT NULL,
+  `email` varchar(30) DEFAULT NULL,
+  `observaciones` varchar(100) DEFAULT NULL,
+  `antPersonales` varchar(100) DEFAULT NULL,
+  `antFamiliares` varchar(100) DEFAULT NULL,
+  `alergias` varchar(100) DEFAULT NULL,
+  `vacunas` varchar(100) DEFAULT NULL,
+  `ocupacion` varchar(30) DEFAULT NULL,
+  `instruccion` varchar(30) DEFAULT NULL,
+  PRIMARY KEY (`cedula`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+
+/************************************/
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteHClinica`(in n int)
+BEGIN
+	delete from hClinicas where num = n;
+END$$
+DELIMITER ;
+
+/************************************/
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `deletePaciente`(in ced char(10))
+BEGIN
+	delete from paciente where cedula = ced;
+END$$
+DELIMITER ;
+
+/************************************/
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `editarHClinica`(in n int,
+in nomC varchar(50),
+in fec varchar(15),
+in an varchar(250),
+in ex varchar(250),
+in diag varchar(250),
+in trat varchar(250))
+BEGIN
+	update hClinicas set nombreCompleto = nomC,
+    fecha = fec,
+    anamnesis = an,
+    exploracion = ex,
+    diagnostico = diag,
+    tratamiento = trat where num = n;
+END$$
+DELIMITER ;
+
+/************************************/
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `editarPaciente`(IN ced char(10),
+    in estP varchar(5),
+	in ap1 varchar(20),
+	in ap2 varchar(20),
+	in nom varchar(20),
+    in nomC varchar(50),
+	in histC int,
+	in sex varchar(8),
+	in fechaN varchar(15),
+	in ed int,
+	in grupS varchar(5),
+	in tel varchar(10),
+	in cel char(10),
+	in dir varchar(50),
+	in prov varchar(20),
+	in eml varchar(30),
+	in obs varchar(100),
+	in antP varchar(100),
+	in antF varchar(100),
+	in aler varchar(100),
+	in vac varchar(100),
+    in ocup varchar(30),
+    in inst varchar(30))
+BEGIN
+	update paciente set estadoPaciente = estP,
+    apellido1 = ap1,
+    apellido2 = ap2,
+    nombre = nom,
+    nombreCompleto = nomC,
+    historiaClinica = histC,
+    sexo = sex,
+    fechaNacimiento = fechaN,
+    edad = ed,
+    grupoSanguineo = grupS,
+    telefono = tel,
+    celular = cel,
+    direccion = dir,
+    provincia = prov,
+    email = eml,
+    observaciones = obs,
+    antPersonales = antP,
+    antFamiliares = antF,
+    alergias = aler,
+    vacunas = vac,
+    ocupacion = ocup,
+    instruccion = inst where cedula = ced;
+END$$
+DELIMITER ;
+
+/************************************/
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insertHistClinica`(in cedula char(10),
+in nombreCompleto varchar(50),
+in fecha varchar(15),
+in anamnesis varchar(250),
+in exploracion varchar(250),
+in diagnostico varchar(250),
+in tratamiento varchar(250)
+)
+BEGIN
+	insert into hClinicas (cedula, nombreCompleto, fecha, anamnesis, exploracion, diagnostico, tratamiento) values (cedula, nombreCompleto, fecha, anamnesis, exploracion, diagnostico, tratamiento);
+END$$
+DELIMITER ;
+
+
+/************************************/
+
+DELIMITER $$
+CREATE DEFINER=`Andrea`@`%` PROCEDURE `insertPaciente`(IN cedula char(10),
+    in estadoPaciente varchar(5),
+	in apellido1 varchar(20),
+	in apellido2 varchar(20),
+	in nombre varchar(20),
+    in nombreCompleto varchar(50),
+	in historiaClinica int,
+	in sexo varchar(8),
+	in fechaNacimiento varchar(15),
+	in edad int,
+	in grupoSanguineo varchar(5),
+	in telefono varchar(10),
+	in celular char(10),
+	in direccion varchar(50),
+	in provincia varchar(20),
+	in email varchar(30),
+	in observaciones varchar(100),
+	in antPersonales varchar(100),
+	in antFamiliares varchar(100),
+	in alergias varchar(100),
+	in vacunas varchar(100),
+    in ocupacion varchar(30),
+    in instruccion varchar(30))
+BEGIN
+	insert into paciente values (cedula, estadoPaciente, apellido1, apellido2, nombre, nombreCompleto, historiaClinica, sexo, fechaNacimiento, edad, grupoSanguineo, telefono, celular, direccion, provincia, email, observaciones, antPersonales, antFamiliares, alergias, vacunas, ocupacion, instruccion);
+END$$
+DELIMITER ;
+
+/************************************/
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `mostrarHClinica`(in n int)
+BEGIN
+	select fecha, anamnesis, exploracion, diagnostico, tratamiento from hclinicas where num = n;
+END$$
+DELIMITER ;
+
+/************************************/
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `mostrarPaciente`(in ced char(10))
+BEGIN
+	select * from paciente where cedula = ced;
+END$$
+DELIMITER ;
+
+/************************************/
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `recupPorCedula`(in busqueda char(30))
+BEGIN
+	if exists(select * from paciente where cedula like CONCAT('%', busqueda, '%'))
+    then
+    select * from paciente where cedula like CONCAT('%', busqueda, '%');
+    end if;
+END$$
+DELIMITER ;
+
+/************************************/
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `recupPorNombre`(in busqueda char(30))
+BEGIN
+    if exists(select * from paciente where nombreCompleto like CONCAT('%', busqueda, '%'))
+    then
+    select * from paciente where nombreCompleto like CONCAT('%', busqueda, '%');
+    end if;
+END$$
+DELIMITER ;
